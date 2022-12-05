@@ -30,25 +30,30 @@ public class Produto {
 	
 	@Column(name = "data_cadastro", updatable = false)
 	private LocalDate dataCadastro;
+	
+	@Column(name = "estoque")
+	private Long estoque;
 
 	public Produto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Produto(String nome, BigDecimal preco, String descricao) {
+	public Produto(String nome, BigDecimal preco, String descricao, Long estoque) {
 		super();
 		this.nome = nome;
 		this.preco = preco;
 		this.descricao = descricao;
+		this.estoque = estoque;
 	}
 
-	public Produto(Long id, String nome, BigDecimal preco, String descricao) {
+	public Produto(Long id, String nome, BigDecimal preco, String descricao, Long estoque) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
 		this.descricao = descricao;
+		this.estoque = estoque;
 	}
 
 	@PrePersist
@@ -97,9 +102,17 @@ public class Produto {
 	public void setDataCadastro(LocalDate dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
+	
+	public Long getEstoque() {
+		return estoque;
+	}
+
+	public void setEstoque(Long estoque) {
+		this.estoque = estoque;
+	}
 
 	@Override
 	public String toString() {
-		return "Produto [id=" + id + ", nome=" + nome + ", preco=" + preco + ", descricao=" + descricao + "]";
+		return "Produto [id=" + id + ", nome=" + nome + ", preco=" + preco + ", estoque=" + estoque + ", descricao=" + descricao + "]";
 	}
 }

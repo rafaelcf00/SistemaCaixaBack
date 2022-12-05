@@ -6,6 +6,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.projeto.sistemacaixa.model.Cliente;
 import com.projeto.sistemacaixa.model.Produto;
 import com.projeto.sistemacaixa.model.repository.ProdutoRepository;
+import com.projeto.sistemacaixa.rest.clientes.ClienteFormRequest;
 
 @RestController
 @RequestMapping("/api/produtos")
@@ -31,58 +36,64 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoRepository repository;
 	
-	@GetMapping
-	public List<ProdutoFormRequest> getLista() {
 
-		return repository.findAll(Sort.by("id")).stream().map( p -> ProdutoFormRequest.fromModel(p) ).collect(Collectors.toList());
-	}
-	
 	@GetMapping("{id}")
 	public ResponseEntity<ProdutoFormRequest> getById(@PathVariable Long id) {
-		Optional<Produto> produtoExistente = repository.findById(id);
 		
-		if(produtoExistente.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		var produto = produtoExistente.map(ProdutoFormRequest::fromModel).get();
-		return ResponseEntity.ok(produto);
+		return repository.findById(id)
+				.map(ProdutoFormRequest::fromModel)
+				.map(produtoFR -> ResponseEntity.ok(produtoFR))
+				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
+
 	
 	@PostMapping
-	public ProdutoFormRequest salvar( @RequestBody ProdutoFormRequest produto) {
+	public ResponseEntity salvar (@RequestBody ProdutoFormRequest request) {
 		
-		Produto entidadeProduto = produto.toModel();
-		repository.save(entidadeProduto);
-		return ProdutoFormRequest.fromModel(entidadeProduto);
-		
+		Produto produto = request.toModel();
+		repository.save(produto);
+		return ResponseEntity.ok(ProdutoFormRequest.fromModel(produto));
 	}
 	
 	@PutMapping("{id}")
-	public ResponseEntity<Void> atualizar (@PathVariable Long id, @RequestBody ProdutoFormRequest produto) {
+	public ResponseEntity<Void> atualizar (@PathVariable Long id, @RequestBody ProdutoFormRequest request) {
+		
 		Optional<Produto> produtoExistente = repository.findById(id);
 		
-		if(produtoExistente.isEmpty()) {
+		if (produtoExistente.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		Produto entidade = produto.toModel();
-		entidade.setId(id);
-		repository.save(entidade);
-		
-		return ResponseEntity.ok().build();
+		Produto produto = request.toModel();
+		produto.setId(id);
+		repository.save(produto);
+		return ResponseEntity.noContent().build();
 	}
 	
+	
 	@DeleteMapping("{id}")
-	public ResponseEntity<Void> deletar(@PathVariable Long id) {
-		Optional<Produto> produtoExistente = repository.findById(id);
+	public ResponseEntity<Object> delete(@PathVariable Long id) {
 		
-		if(produtoExistente.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
+		return repository.findById(id)
+				.map(produto -> {
+					repository.delete(produto);
+					return ResponseEntity.noContent().build();
+				})
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+	
+	
+	@GetMapping
+	public Page<ProdutoFormRequest> getLista( 
 		
-		repository.delete(produtoExistente.get());
-		return ResponseEntity.noContent().build();
-		
+			@RequestParam(value = "nome", required = false, defaultValue = "") String nome,
+			Pageable pageable
+			
+			
+		) {
+		return repository
+				.buscarPorNome("%" + nome + "%", pageable)
+				.map(ProdutoFormRequest::fromModel);
+				
 	}
 }

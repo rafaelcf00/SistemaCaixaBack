@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.projeto.sistemacaixa.model.Cliente;
 import com.projeto.sistemacaixa.model.Produto;
+import com.projeto.sistemacaixa.rest.clientes.ClienteFormRequest;
 
 public class ProdutoFormRequest {
 	
@@ -12,6 +14,7 @@ public class ProdutoFormRequest {
 	private String nome;
 	private BigDecimal preco;
 	private String descricao;
+	private Long estoque;
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate cadastro;
@@ -22,21 +25,22 @@ public class ProdutoFormRequest {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProdutoFormRequest(Long id, String nome, BigDecimal preco, String descricao, LocalDate cadastro) {
+	public ProdutoFormRequest(Long id, String nome, BigDecimal preco, String descricao, Long estoque, LocalDate cadastro) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
 		this.descricao = descricao;
+		this.estoque = estoque;
 		this.cadastro = cadastro;
 	}
 
 	public Produto toModel() {
-		return new Produto(id, nome, preco, descricao);
+		return new Produto(id, nome, preco, descricao, estoque);
 	}
 	
 	public static ProdutoFormRequest fromModel(Produto produto) {
-		return new ProdutoFormRequest(produto.getId(), produto.getNome(), produto.getPreco(), produto.getDescricao(), produto.getDataCadastro() );
+		return new ProdutoFormRequest(produto.getId(), produto.getNome(), produto.getPreco(), produto.getDescricao(), produto.getEstoque(), produto.getDataCadastro() );
 	}
 	
 	public String getNome() {
@@ -63,6 +67,12 @@ public class ProdutoFormRequest {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	public Long getEstoque() {
+		return estoque;
+	}
+	public void setEstoque(Long estoque) {
+		this.estoque = estoque;
+	}
 	
 	
 	public LocalDate getCadastro() {
@@ -73,12 +83,6 @@ public class ProdutoFormRequest {
 		this.cadastro = cadastro;
 	}
 
-	@Override
-	public String toString() {
-		return "ProdutoFormRequest [id=" + id + ", nome=" + nome + ", preco=" + preco + ", descricao=" + descricao
-				+ "]";
-	}
-	
 }
 	
 	
