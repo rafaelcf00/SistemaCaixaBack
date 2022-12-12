@@ -14,7 +14,7 @@ public class ProdutoFormRequest {
 	private String nome;
 	private BigDecimal preco;
 	private String descricao;
-	private Long estoque;
+	private Integer estoque;
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate cadastro;
@@ -25,7 +25,7 @@ public class ProdutoFormRequest {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProdutoFormRequest(Long id, String nome, BigDecimal preco, String descricao, Long estoque, LocalDate cadastro) {
+	public ProdutoFormRequest(Long id, String nome, BigDecimal preco, String descricao, Integer estoque, LocalDate cadastro) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -67,10 +67,10 @@ public class ProdutoFormRequest {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getEstoque() {
+	public Integer getEstoque() {
 		return estoque;
 	}
-	public void setEstoque(Long estoque) {
+	public void setEstoque(Integer estoque) {
 		this.estoque = estoque;
 	}
 	

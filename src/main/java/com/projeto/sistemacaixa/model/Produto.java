@@ -32,14 +32,14 @@ public class Produto {
 	private LocalDate dataCadastro;
 	
 	@Column(name = "estoque")
-	private Long estoque;
+	private Integer estoque;
 
 	public Produto() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Produto(String nome, BigDecimal preco, String descricao, Long estoque) {
+	public Produto(String nome, BigDecimal preco, String descricao, Integer estoque) {
 		super();
 		this.nome = nome;
 		this.preco = preco;
@@ -47,7 +47,7 @@ public class Produto {
 		this.estoque = estoque;
 	}
 
-	public Produto(Long id, String nome, BigDecimal preco, String descricao, Long estoque) {
+	public Produto(Long id, String nome, BigDecimal preco, String descricao, Integer estoque) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -92,8 +92,6 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
-	
 
 	public LocalDate getDataCadastro() {
 		return dataCadastro;
@@ -103,11 +101,11 @@ public class Produto {
 		this.dataCadastro = dataCadastro;
 	}
 	
-	public Long getEstoque() {
+	public Integer getEstoque() {
 		return estoque;
 	}
 
-	public void setEstoque(Long estoque) {
+	public void setEstoque(Integer estoque) {
 		this.estoque = estoque;
 	}
 
