@@ -1,25 +1,2 @@
-INDEX VERSION 1.127+C:\SistemaCaixa\Backend\sistema-caixa\src\main\resources\reports\.metadata\.plugins\org.eclipse.jdt.core
-1100444131.index
-1014239179.index
-1403354635.index
-1344048620.index
-3454707610.index
-1723747841.index
-2437421708.index
-1985194742.index
+INDEX VERSION 1.131+C:\SistemaCaixa\Backend\sistema-caixa\src\main\resources\reports\.metadata\.plugins\org.eclipse.jdt.core
 2142118396.index
-881106319.index
-3281693634.index
-1711550746.index
-58085521.index
-2131955108.index
-2339219954.index
-137032458.index
-781214498.index
-2399668161.index
-4259863214.index
-3851062390.index
-1883134219.index
-1784061771.index
-2985668135.index
-2673753621.index

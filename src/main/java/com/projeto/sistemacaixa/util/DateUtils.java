@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -17,22 +18,22 @@ import org.springframework.util.StringUtils;
 public class DateUtils {
 	
 	private static final String PADRAO_FORMATACAO_DATA = "dd/MM/yyyy";
-	public static final Date DATA_INICIO_PADRAO;
+	public static final Timestamp DATA_INICIO_PADRAO;
 	static {
 		DATA_INICIO_PADRAO = DateUtils.fromString("01/01/1970");
 	}
 
-	public static Date fromString(String dataString) {
+	public static Timestamp fromString(String dataString) {
 		return fromString(dataString, false);
 	}
 	
-	public static Date fromString(String dataString, boolean atEndOfDay) {
+	public static Timestamp fromString(String dataString, boolean atEndOfDay) {
 		
 		if (!StringUtils.hasText(dataString)) {
 			return null;
 		}
 		
-		var data = LocalDate.parse(dataString, DateTimeFormatter.ofPattern(PADRAO_FORMATACAO_DATA));
+		LocalDate data = LocalDate.parse(dataString, DateTimeFormatter.ofPattern(PADRAO_FORMATACAO_DATA));
 		
 		LocalDateTime dataHora;
 		
@@ -43,11 +44,11 @@ public class DateUtils {
 			dataHora = data.atStartOfDay();
 			
 		}
-		var instant = dataHora.atZone(ZoneId.systemDefault()).toInstant();
-		return Date.from(instant);
+		Instant instant = dataHora.atZone(ZoneId.systemDefault()).toInstant();
+		return Timestamp.from(instant);
 	}
 
-	public static Date hoje(boolean atEndOfDay) {
+	public static Timestamp hoje(boolean atEndOfDay) {
 		String dataHojeFormatada = LocalDate.now().format(DateTimeFormatter.ofPattern(PADRAO_FORMATACAO_DATA));
 		return fromString(dataHojeFormatada, atEndOfDay);
 	}

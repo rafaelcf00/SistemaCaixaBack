@@ -1,5 +1,6 @@
 package com.projeto.sistemacaixa.rest.vendas;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +17,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,14 +67,15 @@ public class VendasController {
 		
 	}
 	
+	
 	@GetMapping("/relatorio-vendas")
 	public ResponseEntity<byte[]> relatorioVendas(@RequestParam(value = "id", required = false, defaultValue = "") Long id,
 			@RequestParam(value = "inicio", required = false, defaultValue = "") String inicio,
 			@RequestParam(value = "fim", required = false, defaultValue = "") String fim
 			){
 		
-		Date dataInicio = DateUtils.fromString(inicio);
-		Date dataFim = DateUtils.fromString(fim, true);
+		Timestamp dataInicio = DateUtils.fromString(inicio);
+		Timestamp dataFim = DateUtils.fromString(fim, true);
 		
 		if (dataInicio == null) {
 			dataInicio = DateUtils.DATA_INICIO_PADRAO;
@@ -82,15 +86,15 @@ public class VendasController {
 			dataFim = DateUtils.hoje(true);
 		}
 		
-		var relatorioGerado = relatorioVendasService.gerarRelatorio(id, dataInicio, dataFim);
+		byte[] relatorioGerado = relatorioVendasService.gerarRelatorio(id, dataInicio, dataFim);
 		
-		var headers = new HttpHeaders();
-		var fileName = "relatorio-vendas.pdf";
+		HttpHeaders headers = new HttpHeaders();
+		String fileName = "relatorio-vendas.pdf";
 		
 		headers.setContentDispositionFormData("inline; filename=\"" + fileName + "\"", fileName);
 		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 		headers.setContentType(MediaType.APPLICATION_PDF);
-		var responseEntity = new ResponseEntity<>(relatorioGerado, headers, HttpStatus.OK);
+		ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(relatorioGerado, headers, HttpStatus.OK);
 		return responseEntity;
 	}
 	

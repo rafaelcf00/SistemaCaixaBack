@@ -1,5 +1,6 @@
 package com.projeto.sistemacaixa.rest.produtos;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -24,9 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.projeto.sistemacaixa.model.Cliente;
+import com.projeto.sistemacaixa.model.ItemVenda;
 import com.projeto.sistemacaixa.model.Produto;
+import com.projeto.sistemacaixa.model.Venda;
+import com.projeto.sistemacaixa.model.repository.ItemVendaRepository;
 import com.projeto.sistemacaixa.model.repository.ProdutoRepository;
+import com.projeto.sistemacaixa.model.repository.VendaRepository;
 import com.projeto.sistemacaixa.rest.clientes.ClienteFormRequest;
+import com.projeto.sistemacaixa.service.exception.DataIntegrityViolationException;
 
 @RestController
 @RequestMapping("/api/produtos")
@@ -35,6 +41,9 @@ public class ProdutoController {
 	
 	@Autowired
 	private ProdutoRepository repository;
+	
+	@Autowired
+	private ItemVendaRepository itemVendaRepository;
 	
 
 	@GetMapping("{id}")
@@ -73,6 +82,31 @@ public class ProdutoController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<Object> delete(@PathVariable Long id) {
+			
+			Produto objProduto = repository.findById(id).get();
+		
+			List<Long> listaVendas = (List<Long>) itemVendaRepository
+					.findAll()
+					.stream()
+					.map(ItemVenda -> ItemVenda.getProduto()
+							.getId()).collect(Collectors.toList());
+			
+//			List<ItemVenda> listaVendas = itemVendaRepository.findAll();
+			
+			for (int i = 0; i < listaVendas.size(); i++) {
+				
+				if (listaVendas.get(i) == objProduto.getId()) {
+					
+					throw new DataIntegrityViolationException("O produto possui vendas associados a ele.");
+					
+				}
+				
+			}
+		
+//		   if (obj.getProduto().getId() == objProduto.getId() ) {
+//
+//	            throw new DataIntegrityViolationException("O produto possui vendas associados a ele.");
+//	        }
 		
 		return repository.findById(id)
 				.map(produto -> {
@@ -86,11 +120,9 @@ public class ProdutoController {
 	@GetMapping
 	public Page<ProdutoFormRequest> getLista( 
 		
-			@RequestParam(value = "nome", required = false, defaultValue = "") String nome,
-			Pageable pageable
-			
-			
-		) {
+			@RequestParam(value = "nome", required = false, defaultValue = "")
+			String nome,
+			Pageable pageable ) {
 		return repository
 				.buscarPorNome("%" + nome + "%", pageable)
 				.map(ProdutoFormRequest::fromModel);

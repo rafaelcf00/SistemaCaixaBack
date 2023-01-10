@@ -3,6 +3,7 @@ package com.projeto.sistemacaixa.service;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class RelatorioVendasService {
 	@Autowired
 	private DataSource dataSource;
 	
-public byte[] gerarRelatorio(Long idCliente, Date dataInicio, Date dataFim) {
+public byte[] gerarRelatorio(Long idCliente, Timestamp dataInicio, Timestamp dataFim) {
 		
 		// try with resources
 		
