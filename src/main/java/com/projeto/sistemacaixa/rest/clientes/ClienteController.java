@@ -43,7 +43,7 @@ public class ClienteController {
 		
 		Optional<Cliente> clienteExistente = repository.findById(id);
 		
-		if (clienteExistente.isEmpty()) {
+		if (clienteExistente == null) {
 			return ResponseEntity.notFound().build();
 		}
 		
