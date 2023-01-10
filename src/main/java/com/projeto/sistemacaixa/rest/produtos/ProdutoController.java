@@ -67,16 +67,16 @@ public class ProdutoController {
 	@PutMapping("{id}")
 	public ResponseEntity<Void> atualizar (@PathVariable Long id, @RequestBody ProdutoFormRequest request) {
 		
-		Optional produtoExistente = repository.findById(id);
+		Optional<Produto> produtoExistente = repository.findById(id);
 		
-		if (produtoExistente.isEmpty()) {
+		if (produtoExistente == null ) {
 			return ResponseEntity.notFound().build();
 		}
 		
 		Produto produto = request.toModel();
 		produto.setId(id);
 		repository.save(produto);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 	
 	
