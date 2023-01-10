@@ -67,7 +67,7 @@ public class ProdutoController {
 	@PutMapping("{id}")
 	public ResponseEntity<Void> atualizar (@PathVariable Long id, @RequestBody ProdutoFormRequest request) {
 		
-		Optional<Produto> produtoExistente = repository.findById(id);
+		Optional produtoExistente = repository.findById(id);
 		
 		if (produtoExistente.isEmpty()) {
 			return ResponseEntity.notFound().build();
