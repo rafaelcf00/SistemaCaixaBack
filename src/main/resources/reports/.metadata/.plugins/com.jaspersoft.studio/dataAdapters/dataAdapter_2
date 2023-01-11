@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><jdbcDataAdapter class="net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl"><name>BANCODADOSVENDAS</name><driver>org.postgresql.Driver</driver><username>postgres</username><password>flamengo00</password><savePassword>true</savePassword><url>jdbc:postgresql://localhost:5432/sistema-caixa</url><database/><serverAddress/></jdbcDataAdapter>
